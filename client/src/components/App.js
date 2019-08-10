@@ -63,48 +63,4 @@ const App = () => {
   );
 };
 
-// class App extends React.Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {};
-//     this.handleChange = this.handleChange.bind(this);
-//     this.handleRegister = this.handleRegister.bind(this);
-//     this.handleLogin = this.handleLogin.bind(this);
-//   }
-
-//   componentDidMount() {
-//   }
-
-//   handleRegister() {
-//     const { username, password, password2 } = this.state;
-//     axios.post('/register', { username, password, password2 })
-//       .then(({ data }) => this.setState(data));
-//   }
-
-//   handleLogin() {
-//     const { username, password } = this.state;
-//     axios.post('/login', { username, password })
-//       .then(({ data }) => console.log(data));
-//   }
-
-//   handleChange(e) {
-//     this.setState({
-//       [e.target.name]: e.target.value,
-//     });
-//   }
-
-//   render() {
-//     return (
-//       <React.Fragment>
-//         <GlobalStyle whiteColor />
-//         <Header whiteColor>
-//           <span>AvalonStats</span>
-//         </Header>
-//         <Register handleChange={this.handleChange} handleRegister={this.handleRegister} />
-//         <Login handleChange={this.handleChange} handleLogin={this.handleLogin} />
-//       </React.Fragment>
-//     );
-//   }
-// }
-
 export default App;
