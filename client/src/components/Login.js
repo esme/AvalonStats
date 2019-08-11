@@ -25,10 +25,12 @@ const Login = ({ handleChange, handleLogin }) => (
     <form onChange={e => handleChange(e)}>
       <Div>
         <label>Username</label>
+        <br />
         <Input type="text" name="username" />
       </Div>
       <Div>
         <label>Password</label>
+        <br />
         <Input type="password" name="password" />
       </Div>
       <Div>

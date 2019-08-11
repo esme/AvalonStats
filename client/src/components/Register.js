@@ -30,14 +30,17 @@ const Register = ({ handleChange, handleRegister }) => (
     <form onChange={e => handleChange(e)}>
       <Div>
         <label>Username</label>
+        <br />
         <Input type="text" name="username" />
       </Div>
       <Div>
         <label>Password</label>
+        <br />
         <Input type="password" name="password" />
       </Div>
       <Div>
         <label>Verify Password</label>
+        <br />
         <Input type="password" name="password2" />
       </Div>
       <Div>

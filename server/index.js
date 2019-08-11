@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const User = require('./models/user');
+const Game = require('./models/game');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -97,6 +98,16 @@ app.post('/register', (req, res) => {
   } else {
     res.status(500).send("{errors: \"Passwords don't match\"}").end();
   }
+});
+
+app.post('/game', async (req, res) => {
+  const result = await Game.create(req.body);
+  res.send(result);
+});
+
+app.get('/game', async (req, res) => {
+  const result = await Game.find({});
+  res.send(result);
 });
 
 app.listen(port, () => {

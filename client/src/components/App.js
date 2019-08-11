@@ -1,8 +1,13 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import axios from 'axios';
+
 import Register from './Register';
 import Login from './Login';
-import axios from 'axios';
+import Toolbar from './Toolbar';
+import NewGame from './NewGame';
+import Games from './Games';
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -14,27 +19,32 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-const Header = styled.section`
-  height: 65px;
-  padding: 0 20px;
-  font-size: 26px;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: ${props => (props.whiteColor ? '#f7f7f7' : '#28282a')};
-  span {
-    color: #f45531;
-    background-color: ${props => (props.whiteColor ? '#f7f7f7' : '#28282a')};
-  }
+const Div = styled('div')`
 `;
 
-const initialState = {};
+const initialState = {
+  startDate: new Date(),
+  players: [],
+};
 
-function reducer(state = initialState, action) {
+function reducer(state, action) {
+  const players = [...state.players];
+
   switch (action.type) {
     case 'input_details':
       return { ...state, ...action.payload };
+    case 'change_date':
+      return { ...state, startDate: action.payload };
+    case 'add_player':
+      return { ...state, players: [...state.players, { playerName: state.playerName, score: 0, role: 'Merlin' }] };
+    case 'increment':
+      players[action.payload].score += 1;
+      return { ...state, players };
+    case 'decrement':
+      players[action.payload].score -= 1;
+      return { ...state, players };
+    case 'game_data':
+      return { ...state, gameData: action.payload };
     default:
       throw new Error();
   }
@@ -42,8 +52,18 @@ function reducer(state = initialState, action) {
 
 const App = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { username, password, password2 } = state;
-  console.log(state);
+  const {
+    username,
+    password,
+    password2,
+    startDate,
+    players,
+    playerName,
+    title,
+    gameData,
+  } = state;
+
+  // console.log(state);
 
   const handleRegister = () => axios.post('/register', { username, password, password2 });
 
@@ -51,14 +71,47 @@ const App = () => {
 
   const handleChange = e => dispatch({ type: 'input_details', payload: { [e.target.name]: e.target.value } });
 
+  const handleChangeDate = date => dispatch({ type: 'change_date', payload: date });
+
+  const handleAddPlayer = playerName ? () => dispatch({ type: 'add_player' }) : null;
+
+  const handleIncrement = i => dispatch({ type: 'increment', payload: i });
+
+  const handleDecrement = i => dispatch({ type: 'decrement', payload: i });
+
+  const handleAddGame = () => axios.post('/game', { title, startDate, players });
+
+  const getGames = () => {
+    axios.get('/game')
+      .then(({ data }) => {
+        console.log(data);
+        dispatch({ type: 'game_data', payload: data });
+      });
+  };
+
+  useEffect(() => {
+    getGames();
+  }, []);
+
   return (
     <React.Fragment>
       <GlobalStyle whiteColor />
-      <Header whiteColor>
-        <span>AvalonStats</span>
-      </Header>
-      <Register handleChange={handleChange} handleRegister={handleRegister} />
-      <Login handleChange={handleChange} handleLogin={handleLogin} />
+      <Toolbar />
+      <Div>
+        {gameData && <Games gameData={gameData} />}
+        <NewGame
+          startDate={startDate}
+          handleChangeDate={handleChangeDate}
+          handleChange={handleChange}
+          handleAddPlayer={handleAddPlayer}
+          players={players}
+          handleIncrement={handleIncrement}
+          handleDecrement={handleDecrement}
+          handleAddGame={handleAddGame}
+        />
+        <Register handleChange={handleChange} handleRegister={handleRegister} />
+        <Login handleChange={handleChange} handleLogin={handleLogin} />
+      </Div>
     </React.Fragment>
   );
 };
