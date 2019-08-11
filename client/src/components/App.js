@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useReducer } from 'react';
-import styled, { createGlobalStyle } from 'styled-components';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { createGlobalStyle } from 'styled-components';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import axios from 'axios';
 
 import Register from './Register';
@@ -15,16 +15,13 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     color: ${props => (props.whiteColor ? '#222' : '#eee')};
     background-color: ${props => (props.whiteColor ? 'white' : '#222')};
-    font-family: "Open Sans";
   }
-`;
-
-const Div = styled('div')`
 `;
 
 const initialState = {
   startDate: new Date(),
   players: [],
+  user: null,
 };
 
 function reducer(state, action) {
@@ -45,6 +42,8 @@ function reducer(state, action) {
       return { ...state, players };
     case 'game_data':
       return { ...state, gameData: action.payload };
+    case 'user':
+      return { ...state, user: action.payload };
     default:
       throw new Error();
   }
@@ -61,13 +60,33 @@ const App = () => {
     playerName,
     title,
     gameData,
+    user,
   } = state;
 
   // console.log(state);
 
-  const handleRegister = () => axios.post('/register', { username, password, password2 });
+  const handleRegister = (e) => {
+    e.preventDefault();
+    if (username) {
+      axios.post('/register', { username, password, password2 })
+        .then(({ data }) => console.log(data));
+    }
+  };
 
-  const handleLogin = () => axios.post('/login', { username, password });
+  const handleLogin = (e) => {
+    e.preventDefault();
+    axios.post('/login', { username, password })
+      .then(({ data }) => {
+        if (data) {
+          window.location = '/games';
+        } else {
+          window.location = '/';
+        }
+      })
+      .catch((error) => {
+        window.location = '/';
+      });
+  };
 
   const handleChange = e => dispatch({ type: 'input_details', payload: { [e.target.name]: e.target.value } });
 
@@ -79,7 +98,20 @@ const App = () => {
 
   const handleDecrement = i => dispatch({ type: 'decrement', payload: i });
 
-  const handleAddGame = () => axios.post('/game', { title, startDate, players });
+  const handleAddGame = () => {
+    axios.post('/game', { title, startDate, players })
+      .then(({ data }) => console.log(data));
+  };
+
+  const getUser = () => {
+    axios.get('/user')
+      .then(({ data }) => {
+        console.log(data);
+        if (data) {
+          dispatch({ type: 'user', payload: data });
+        }
+      });
+  };
 
   const getGames = () => {
     axios.get('/game')
@@ -91,28 +123,46 @@ const App = () => {
 
   useEffect(() => {
     getGames();
+    getUser();
   }, []);
 
   return (
-    <React.Fragment>
-      <GlobalStyle whiteColor />
-      <Toolbar />
-      <Div>
-        {gameData && <Games gameData={gameData} />}
-        <NewGame
-          startDate={startDate}
-          handleChangeDate={handleChangeDate}
-          handleChange={handleChange}
-          handleAddPlayer={handleAddPlayer}
-          players={players}
-          handleIncrement={handleIncrement}
-          handleDecrement={handleDecrement}
-          handleAddGame={handleAddGame}
+    <Router>
+      <React.Fragment>
+        <GlobalStyle whiteColor />
+        <Toolbar user={user} />
+      </React.Fragment>
+      <Switch>
+        <Route
+          exact
+          path="/"
+          render={() => <Login handleChange={handleChange} handleLogin={handleLogin} />}
         />
-        <Register handleChange={handleChange} handleRegister={handleRegister} />
-        <Login handleChange={handleChange} handleLogin={handleLogin} />
-      </Div>
-    </React.Fragment>
+        <Route
+          path="/register"
+          render={() => <Register handleChange={handleChange} handleRegister={handleRegister} />}
+        />
+        <Route
+          path="/newgame"
+          render={() => (
+            <NewGame
+              startDate={startDate}
+              handleChangeDate={handleChangeDate}
+              handleChange={handleChange}
+              handleAddPlayer={handleAddPlayer}
+              players={players}
+              handleIncrement={handleIncrement}
+              handleDecrement={handleDecrement}
+              handleAddGame={handleAddGame}
+            />
+          )}
+        />
+        <Route
+          path="/games"
+          render={() => gameData && <Games gameData={gameData} />}
+        />
+      </Switch>
+    </Router>
   );
 };
 

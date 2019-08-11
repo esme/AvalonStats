@@ -1,52 +1,42 @@
 import React from 'react';
-import styled from 'tachyons-components';
 
-const Avatar = styled('img')`
-  br-100 h4 w4 dib ba b--black-05 pa2
-`;
-
-const Main = styled('div')`
-  measure center pa4
-`;
-
-const Button = styled('button')`
-  br2 b--black-20
-  b ph3 pv2 input-reset ba bg-light-gray grow pointer f6 dib w-80
-`;
-
-const Div = styled('div')`
-  mt3
-`;
-
-const Input = styled('input')`
-  br2 b--black-20
-  pt2 pb2 input-reset ba bg-transparent hover-white w-80
-`;
+import {
+  Avatar,
+  Main,
+  Button,
+  Div,
+  Input,
+} from './StyledComponents';
 
 const Register = ({ handleChange, handleRegister }) => (
   <Main>
-    <Avatar src="http://tachyons.io/img/avatar_1.jpg"></Avatar>
+    <Avatar
+      src="http://www.gonnageek.com/wp-content/uploads/2013/11/avalon1.jpg"
+      style={{ objectFit: 'cover' }}
+    />
     <h3>Register</h3>
-    <form onChange={e => handleChange(e)}>
+    <form onChange={e => handleChange(e)} onSubmit={e => handleRegister(e)}>
       <Div>
         <label>Username</label>
         <br />
-        <Input type="text" name="username" />
+        <Input type="text" name="username" minLength="1" required />
       </Div>
       <Div>
         <label>Password</label>
         <br />
-        <Input type="password" name="password" />
+        <Input type="password" name="password" minLength="3" required />
       </Div>
       <Div>
         <label>Verify Password</label>
         <br />
-        <Input type="password" name="password2" />
+        <Input type="password" name="password2" minLength="3" required />
       </Div>
       <Div>
-        <Button type="button" onClick={e => handleRegister(e)}>Register</Button>
+        <Button type="submit" value="Register" />
       </Div>
     </form>
+    <br />
+    <a href="/">Login</a>
   </Main>
 );
 

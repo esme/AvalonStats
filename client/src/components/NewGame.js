@@ -45,16 +45,16 @@ const NewGame = ({
     </Div>
     <form onChange={e => handleChange(e)}>
       <Div>
-        <h4>Game:</h4>
+        <h4>Title:</h4>
         <Input type="text" name="title" />
       </Div>
       <Div>
-        <h4>Create New:</h4>
+        <h4>Add Player:</h4>
         <Input type="text" name="playerName" />
         <Button type="button" onClick={handleAddPlayer}>Create Player</Button>
       </Div>
       <Div>
-        <h4>Players:</h4>
+        {players.length ? <h4>Players:</h4> : <br />}
         {players.map((el, i) => (
           <Player
             handleIncrement={() => handleIncrement(i)}

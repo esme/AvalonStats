@@ -61,12 +61,17 @@ passport.deserializeUser((id, done) => {
   });
 });
 
+function isLoggedIn(req, res, next) {
+	if (req.isAuthenticated()) {
+		return next();
+	}
+	res.redirect("/");
+}
+
 // Endpoint to login
-app.post('/login',
-  passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/login',
-  }));
+app.post('/login', passport.authenticate('local'), (req, res) => {
+  res.send(req.user);
+});
 
 // Endpoint to get current user
 app.get('/user', (req, res) => {
@@ -108,6 +113,14 @@ app.post('/game', async (req, res) => {
 app.get('/game', async (req, res) => {
   const result = await Game.find({});
   res.send(result);
+});
+
+app.get('/games', isLoggedIn, (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../client', 'dist', 'index.html'));
+});
+
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../client', 'dist', 'index.html'));
 });
 
 app.listen(port, () => {

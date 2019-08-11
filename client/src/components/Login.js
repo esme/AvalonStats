@@ -1,43 +1,37 @@
 import React from 'react';
-import styled from 'tachyons-components';
 
-const Main = styled('div')`
-  measure center pa4
-`;
-
-const Button = styled('button')`
-  br2 b--black-20
-  b ph3 pv2 input-reset ba bg-light-gray grow pointer f6 dib w-80
-`;
-
-const Div = styled('div')`
-  mt3
-`;
-
-const Input = styled('input')`
-  br2 b--black-20
-  pt2 pb2 input-reset ba bg-transparent hover-white w-80
-`;
+import {
+  Avatar,
+  Main,
+  Button,
+  Div,
+  Input,
+} from './StyledComponents';
 
 const Login = ({ handleChange, handleLogin }) => (
   <Main>
+    <Avatar
+      src="https://images-na.ssl-images-amazon.com/images/I/416NJQ9V7BL.jpg"
+      style={{ objectFit: 'cover', objectPosition: '0 30%' }}
+    />
     <h3>Login</h3>
-    <form onChange={e => handleChange(e)}>
+    <form onChange={e => handleChange(e)} onSubmit={e => handleLogin(e)}>
       <Div>
         <label>Username</label>
         <br />
-        <Input type="text" name="username" />
+        <Input type="text" name="username" minLength="1" required />
       </Div>
       <Div>
         <label>Password</label>
         <br />
-        <Input type="password" name="password" />
+        <Input type="password" name="password" minLength="3" required />
       </Div>
       <Div>
-        <Button type="button" onClick={e => handleLogin(e)}>Login</Button>
+        <Button type="submit" value="Login" minLength="3" required />
       </Div>
     </form>
-    <a>Create Account</a>
+    <br />
+    <a href="/register">Create Account</a>
   </Main>
 );
 

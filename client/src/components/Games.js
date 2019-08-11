@@ -1,9 +1,8 @@
 import React from 'react';
-import styled from 'tachyons-components';
 
-const Main = styled('div')`
-  measure center pa4
-`;
+import {
+  Main,
+} from './StyledComponents';
 
 const Games = ({ gameData }) => (
   <Main>

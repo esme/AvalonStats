@@ -1,0 +1,46 @@
+import styled from 'tachyons-components';
+
+const Avatar = styled('img')`
+  br-100 h4 w4 dib ba b--black-05
+`;
+
+const Main = styled('div')`
+  measure center pa4
+`;
+
+const Button = styled('input')`
+  br2 b--black-20
+  b ph3 pv2 input-reset ba bg-light-gray grow pointer f6 dib w-80
+`;
+
+const Div = styled('div')`
+  mt3
+`;
+
+const Input = styled('input')`
+  br2 b--black-20
+  pt2 pb2 input-reset ba bg-transparent w-80
+`;
+
+// const Header = styled.section`
+//   height: 65px;
+//   padding: 0 20px;
+//   font-size: 26px;
+//   font-weight: bold;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   background-color: ${props => (props.whiteColor ? '#f7f7f7' : '#28282a')};
+//   span {
+//     color: #f45531;
+//     background-color: ${props => (props.whiteColor ? '#f7f7f7' : '#28282a')};
+//   }
+// `;
+
+export {
+  Avatar,
+  Main,
+  Button,
+  Div,
+  Input,
+};
