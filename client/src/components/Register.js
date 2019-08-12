@@ -19,7 +19,7 @@ const Register = ({ handleChange, handleRegister }) => (
       <Div>
         <label>Username</label>
         <br />
-        <Input type="text" name="username" minLength="1" required />
+        <Input type="text" name="tempUser" minLength="1" required />
       </Div>
       <Div>
         <label>Password</label>

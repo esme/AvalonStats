@@ -51,7 +51,7 @@ const NewGame = ({
         </Div>
         <Div>
           <h4>Add Player:</h4>
-          <Input type="text" name="tempName" onChange={e => handleChange(e)} value={tempName} />
+          <Input type="text" name="tempName" onChange={e => handleChange(e)} value={tempName} placeholder="(required)" />
           <Button type="button" onClick={handleAddPlayer} value="Create Player" />
         </Div>
         <Div>

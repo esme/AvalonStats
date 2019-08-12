@@ -34,6 +34,7 @@ const App = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const {
     id,
+    tempUser,
     username,
     password,
     password2,
@@ -46,28 +47,40 @@ const App = () => {
 
   let { tempName } = state;
 
-  // console.log(state);
-
-  const handleRegister = (e) => {
-    e.preventDefault();
-    if (username) {
-      axios.post('/register', { username, password, password2 })
-        .then(({ data }) => console.log(data));
-    }
-  };
+  console.log('state: ', state);
 
   const handleLogin = (e) => {
-    e.preventDefault();
-    axios.post('/login', { username, password })
+    if (e) { e.preventDefault(); }
+    axios.post('/login', { username: tempUser, password })
       .then(({ data }) => {
-        if (data) {
-          window.location = '/games';
-        } else {
-          window.location = '/';
+        console.log('login: ', data);
+        if (data.username) {
+          const user = { id: data._id, username: data.username };
+          console.log(user);
+          dispatch({ type: 'user', payload: user });
         }
       })
       .catch((error) => {
-        window.location = '/';
+        console.log(error);
+      });
+  };
+
+  const handleRegister = (e) => {
+    e.preventDefault();
+    if (tempUser) {
+      axios.post('/register', { username: tempUser, password, password2 })
+        .then(() => handleLogin());
+    }
+  };
+
+  const getUser = () => {
+    axios.get('/user')
+      .then(({ data }) => {
+        console.log('user: ', data);
+        if (data.username) {
+          const user = { id: data._id, username: data.username };
+          dispatch({ type: 'user', payload: user });
+        }
       });
   };
 
@@ -75,7 +88,7 @@ const App = () => {
 
   const handleChangeDate = date => dispatch({ type: 'change_date', payload: date });
 
-  const handleAddPlayer = players[tempName] ? null : () => dispatch({ type: 'add_player' });
+  const handleAddPlayer = !players[tempName] && tempName ? () => dispatch({ type: 'add_player' }) : null;
 
   const handleSelectTeam = e => dispatch({ type: 'select_team', payload: { [e.target.id]: e.target.value } });
 
@@ -85,35 +98,29 @@ const App = () => {
     const resistanceTeam = [];
     const spyTeam = [];
     const playersArr = Object.keys(players);
-    playersArr.forEach((playerName) => {
-      const playerRole = players[playerName];
-      if (resistance.has(playerRole)) {
-        resistanceTeam.push({ playerName, playerRole });
-      } else {
-        spyTeam.push({ playerName, playerRole });
-      }
-    });
-    axios.post('/game', {
-      id,
-      username,
-      title,
-      startDate,
-      winningTeam,
-      resistanceTeam,
-      spyTeam,
-    })
-      .then(({ data }) => console.log(data));
-  };
-
-  const getUser = () => {
-    axios.get('/user')
-      .then(({ data }) => {
-        if (data) {
-          const payload = { id: data._id, username: data.username };
-          console.log('user: ', payload);
-          dispatch({ type: 'user', payload });
+    if (playersArr.length) {
+      playersArr.forEach((playerName) => {
+        const playerRole = players[playerName];
+        if (resistance.has(playerRole)) {
+          resistanceTeam.push({ playerName, playerRole });
+        } else {
+          spyTeam.push({ playerName, playerRole });
         }
       });
+      axios.post('/game', {
+        id,
+        username,
+        title,
+        startDate,
+        winningTeam,
+        resistanceTeam,
+        spyTeam,
+        players: JSON.stringify(players),
+      })
+        .then(({ data }) => window.location.reload());
+    } else {
+      alert('You need to add at least one player');
+    }
   };
 
   const getGames = () => {
