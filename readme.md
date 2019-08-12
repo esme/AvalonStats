@@ -1,4 +1,4 @@
-# Avalon Tracker
+# AvalonStats
 
 > Project description
 
