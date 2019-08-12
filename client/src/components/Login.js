@@ -24,10 +24,10 @@ const Login = ({ handleChange, handleLogin }) => (
       <Div>
         <label>Password</label>
         <br />
-        <Input type="password" name="password" minLength="3" required />
+        <Input type="password" name="password" minLength="4" required />
       </Div>
       <Div>
-        <Button type="submit" value="Login" minLength="3" required />
+        <Button type="submit" value="Login" minLength="4" required />
       </Div>
     </form>
     <br />

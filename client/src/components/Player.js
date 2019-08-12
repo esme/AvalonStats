@@ -6,15 +6,15 @@ const Div = styled('div')`
   justify-content: space-between;
 `;
 
-const Player = ({ details, handleSelectRole, i }) => (
+const Player = ({ playerName, handleSelectRole }) => (
   <Div>
     <div>
       <span>Player: </span>
-      <span>{details.playerName}</span>
+      <span>{playerName}</span>
     </div>
     <div>
       <span>Role: </span>
-      <select id="playerRole" onChange={e => handleSelectRole(e, i)}>
+      <select id="playerRole" onChange={e => handleSelectRole(e, playerName)}>
         <option value="merlin">Merlin</option>
         <option value="percival">Percival</option>
         <option value="vt">Loyal Servant of Arthur</option>

@@ -9,6 +9,7 @@ import Toolbar from './Toolbar';
 import NewGame from './NewGame';
 import Games from './Games';
 import reducer from './reducer';
+import { resistance } from './Roles';
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -20,16 +21,19 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const initialState = {
+  id: '',
+  username: '',
   startDate: new Date(),
-  players: [],
-  user: {},
+  players: {},
   winningTeam: 'resistance',
-  playerName: '',
+  tempName: '',
+  title: '',
 };
 
 const App = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const {
+    id,
     username,
     password,
     password2,
@@ -37,13 +41,12 @@ const App = () => {
     players,
     title,
     gameData,
-    user,
     winningTeam,
   } = state;
 
-  let { playerName } = state;
+  let { tempName } = state;
 
-  console.log(state);
+  // console.log(state);
 
   const handleRegister = (e) => {
     e.preventDefault();
@@ -72,43 +75,51 @@ const App = () => {
 
   const handleChangeDate = date => dispatch({ type: 'change_date', payload: date });
 
-  const handleAddPlayer = () => {
-    let playerExists = false;
-    if (playerName) {
-      players.forEach((el) => {
-        if (el.playerName === playerName) {
-          playerExists = true;
-        }
-      });
-      if (!playerExists) {
-        dispatch({ type: 'add_player' });
-      }
-    }
-  };
+  const handleAddPlayer = players[tempName] ? null : () => dispatch({ type: 'add_player' });
 
   const handleSelectTeam = e => dispatch({ type: 'select_team', payload: { [e.target.id]: e.target.value } });
 
-  const handleSelectRole = (e, i) => dispatch({ type: 'select_role', payload: { playerRole: e.target.value, i } });
+  const handleSelectRole = (e, selectedPlayerName) => dispatch({ type: 'select_role', payload: { selectedPlayerName, playerRole: e.target.value } });
 
   const handleAddGame = () => {
-    axios.post('/game', { title, startDate, players })
+    const resistanceTeam = [];
+    const spyTeam = [];
+    const playersArr = Object.keys(players);
+    playersArr.forEach((playerName) => {
+      const playerRole = players[playerName];
+      if (resistance.has(playerRole)) {
+        resistanceTeam.push({ playerName, playerRole });
+      } else {
+        spyTeam.push({ playerName, playerRole });
+      }
+    });
+    axios.post('/game', {
+      id,
+      username,
+      title,
+      startDate,
+      winningTeam,
+      resistanceTeam,
+      spyTeam,
+    })
       .then(({ data }) => console.log(data));
   };
 
   const getUser = () => {
     axios.get('/user')
       .then(({ data }) => {
-        console.log(data);
         if (data) {
-          dispatch({ type: 'user', payload: data });
+          const payload = { id: data._id, username: data.username };
+          console.log('user: ', payload);
+          dispatch({ type: 'user', payload });
         }
       });
   };
 
   const getGames = () => {
-    axios.get('/game')
+    axios.get('/gamedata')
       .then(({ data }) => {
-        console.log(data);
+        console.log('gamedata:', data);
         dispatch({ type: 'game_data', payload: data });
       });
   };
@@ -122,7 +133,7 @@ const App = () => {
     <Router>
       <React.Fragment>
         <GlobalStyle whiteColor />
-        <Toolbar user={user} />
+        <Toolbar username={username} />
       </React.Fragment>
       <Switch>
         <Route
@@ -147,7 +158,7 @@ const App = () => {
               handleSelectRole={handleSelectRole}
               handleSelectTeam={handleSelectTeam}
               winningTeam={winningTeam}
-              playerName={playerName}
+              tempName={tempName}
             />
           )}
         />

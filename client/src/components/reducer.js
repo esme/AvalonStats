@@ -1,7 +1,13 @@
 function reducer(state, action) {
-  const players = [...state.players];
+  const tempName = '';
+  const players = { ...state.players };
+  if (action.type === 'add_player') {
+    players[state.tempName] = 'merlin';
+  }
+
   if (action.type === 'select_role') {
-    players[action.payload.i].playerRole = action.payload.playerRole;
+    const { selectedPlayerName, playerRole } = action.payload;
+    players[selectedPlayerName] = playerRole;
   }
 
   switch (action.type) {
@@ -10,14 +16,11 @@ function reducer(state, action) {
     case 'change_date':
       return { ...state, startDate: action.payload };
     case 'add_player':
-      return {
-        ...state,
-        players: [...state.players, { playerName: state.playerName, playerRole: 'merlin' }],
-      };
+      return { ...state, players, tempName };
     case 'game_data':
       return { ...state, gameData: action.payload };
     case 'user':
-      return { ...state, user: action.payload };
+      return { ...state, id: action.payload.id, username: action.payload.username };
     case 'select_team':
       return { ...state, ...action.payload };
     case 'select_role':

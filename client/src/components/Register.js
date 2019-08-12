@@ -24,12 +24,12 @@ const Register = ({ handleChange, handleRegister }) => (
       <Div>
         <label>Password</label>
         <br />
-        <Input type="password" name="password" minLength="3" required />
+        <Input type="password" name="password" minLength="4" required />
       </Div>
       <Div>
         <label>Verify Password</label>
         <br />
-        <Input type="password" name="password2" minLength="3" required />
+        <Input type="password" name="password2" minLength="4" required />
       </Div>
       <Div>
         <Button type="submit" value="Register" />

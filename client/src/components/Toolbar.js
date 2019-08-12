@@ -26,7 +26,7 @@ const Text = styled.section`
   background-color: #f8f9fa;
 `;
 
-const Toolbar = ({ user }) => (
+const Toolbar = ({ username }) => (
   <Navbar bg="light" expand="lg">
     <Navbar.Brand href="/">
       <Brand>AvalonStats</Brand>
@@ -37,7 +37,7 @@ const Toolbar = ({ user }) => (
         <NavLink href="/newgame">New Game</NavLink>
         <NavLink href="/games">Games</NavLink>
       </Nav>
-      {user.username ? <Text>{user.username}</Text> : <Text>Not Logged In</Text>}
+      {username ? <Text>{username}</Text> : <Text>Not Logged In</Text>}
     </Navbar.Collapse>
   </Navbar>
 );

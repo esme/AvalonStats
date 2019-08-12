@@ -7,7 +7,7 @@ import {
 const Games = ({ gameData }) => (
   <Main>
     <h3>Games</h3>
-    {gameData.map(el => <span>{el.title}</span>)}
+    {/* {gameData.map(el => <span>{el.title}</span>)} */}
   </Main>
 );
 

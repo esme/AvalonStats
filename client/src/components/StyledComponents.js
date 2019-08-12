@@ -13,6 +13,10 @@ const Button = styled('input')`
   b ph3 pv2 input-reset ba bg-light-gray grow pointer f6 dib w-80
 `;
 
+const ButtonPill = styled('input')`
+  f6 br-pill bg-dark-green no-underline washed-green ba b--dark-green grow pv2 ph3 dib mr3
+`;
+
 const Div = styled('div')`
   mt3
 `;
@@ -41,6 +45,7 @@ export {
   Avatar,
   Main,
   Button,
+  ButtonPill,
   Div,
   Input,
 };
