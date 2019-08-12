@@ -9,6 +9,7 @@ const GameSchema = mongoose.Schema({
   title: String,
   startDate: Date,
   winningTeam: String,
+  userName: String,
   spyTeam: [PlayerSchema],
   resistanceTeam: [PlayerSchema],
 });

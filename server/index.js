@@ -106,16 +106,18 @@ app.post('/register', (req, res) => {
 });
 
 app.post('/game', async (req, res) => {
+  console.log(req.body);
   const result = await Game.create(req.body);
+  const userData = await User.find(req.body.username);
   res.send(result);
 });
 
-app.get('/game', async (req, res) => {
+app.get('/gamedata', async (req, res) => {
   const result = await Game.find({});
   res.send(result);
 });
 
-app.get('/games', isLoggedIn, (req, res) => {
+app.get('/newgame', isLoggedIn, (req, res) => {
   res.sendFile(path.resolve(__dirname, '../client', 'dist', 'index.html'));
 });
 
