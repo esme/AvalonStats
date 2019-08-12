@@ -9,11 +9,6 @@ const UserSchema = mongoose.Schema({
   },
   password: String,
   dateJoined: Date,
-  totalGamesPlayed: Number,
-  totalWins: Number,
-  totalLosses: Number,
-  totalResWins: Number,
-  totalResLosses: Number,
 });
 
 const User = mongoose.model('User', UserSchema);

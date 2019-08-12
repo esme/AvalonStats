@@ -5,9 +5,13 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const mongoose = require('mongoose');
 const passport = require('passport');
+const axios = require('axios');
 const LocalStrategy = require('passport-local').Strategy;
+
 const User = require('./models/user');
 const Game = require('./models/game');
+
+const updateGame = require('./controllers/game');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -62,10 +66,10 @@ passport.deserializeUser((id, done) => {
 });
 
 function isLoggedIn(req, res, next) {
-	if (req.isAuthenticated()) {
-		return next();
-	}
-	res.redirect("/");
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect('/');
 }
 
 // Endpoint to login
@@ -86,14 +90,13 @@ app.get('/logout', (req, res) => {
 
 // Register User
 app.post('/register', (req, res) => {
-  const { password, password2 } = req.body;
+  const { username, password, password2 } = req.body;
 
   if (password === password2) {
     const newUser = new User({
-      // name: req.body.name,
-      // email: req.body.email,
-      username: req.body.username,
-      password: req.body.password,
+      username,
+      password,
+      dateJoined: new Date(),
     });
 
     User.createUser(newUser, (err, user) => {
@@ -106,10 +109,9 @@ app.post('/register', (req, res) => {
 });
 
 app.post('/game', async (req, res) => {
-  console.log(req.body);
-  const result = await Game.create(req.body);
-  const userData = await User.find(req.body.username);
-  res.send(result);
+  await Game.create(req.body);
+  await updateGame(req.body);
+  res.send();
 });
 
 app.get('/gamedata', async (req, res) => {
