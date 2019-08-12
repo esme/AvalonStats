@@ -20,15 +20,6 @@ const NavLink = styled('a')`
   background-color: #f8f9fa;
 `;
 
-const LinkWrapper = styled.section`
-  color: #007bff;
-  text-decoration: none;
-  background-color: transparent;
-  display: block;
-  padding: 0.5rem 1rem;
-  background-color: #f8f9fa;
-`;
-
 const Text = styled.section`
   display: block;
   padding: 0.5rem 1rem;
@@ -38,21 +29,15 @@ const Text = styled.section`
 const Toolbar = ({ user }) => (
   <Navbar bg="light" expand="lg">
     <Navbar.Brand href="/">
-      <Brand>Avalon Stats</Brand>
+      <Brand>AvalonStats</Brand>
     </Navbar.Brand>
     <Navbar.Toggle aria-controls="basic-navbar-nav" />
     <Navbar.Collapse style={{ backgroundColor: '#f8f9fa' }} id="basic-navbar-nav">
       <Nav className="mr-auto">
-        {/* <Nav.Link href="/">Home</Nav.Link> */}
-        <Link to="/">
-          <LinkWrapper>Home</LinkWrapper>
-        </Link>
-        <Link to="/newgame">
-          <LinkWrapper>New Game</LinkWrapper>
-        </Link>
+        <NavLink href="/newgame">New Game</NavLink>
         <NavLink href="/games">Games</NavLink>
       </Nav>
-      {user ? <Text>{user.username}</Text> : <Text>Not Logged In</Text>}
+      {user.username ? <Text>{user.username}</Text> : <Text>Not Logged In</Text>}
     </Navbar.Collapse>
   </Navbar>
 );

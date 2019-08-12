@@ -37,7 +37,7 @@ const NewGame = ({
     <form onChange={e => handleChange(e)}>
       <Div>
         <h4>Title:</h4>
-        <Input type="text" name="title" />
+        <Input type="text" name="title" placeholder="(optional)" />
       </Div>
       <Div>
         <h4>Winning Team:</h4>
@@ -48,7 +48,7 @@ const NewGame = ({
       </Div>
       <Div>
         <h4>Add Player:</h4>
-        <Input type="text" name="playerName" value={playerName} />
+        <Input type="text" name="playerName" onChange={e => handleChange(e)} value={playerName} />
         <Button type="button" onClick={handleAddPlayer} value="Create Player" />
       </Div>
       <Div>
