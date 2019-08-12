@@ -21,11 +21,16 @@ const GlobalStyle = createGlobalStyle`
 const initialState = {
   startDate: new Date(),
   players: [],
-  user: null,
+  user: {},
+  winningTeam: 'resistance',
+  playerName: '',
 };
 
 function reducer(state, action) {
   const players = [...state.players];
+  if (action.type === 'select_role') {
+    players[action.payload.i].playerRole = action.payload.playerRole;
+  }
 
   switch (action.type) {
     case 'input_details':
@@ -33,11 +38,18 @@ function reducer(state, action) {
     case 'change_date':
       return { ...state, startDate: action.payload };
     case 'add_player':
-      return { ...state, players: [...state.players, { playerName: state.playerName, role: 'Merlin' }] };
+      return {
+        ...state,
+        players: [...state.players, { playerName: state.playerName, playerRole: 'merlin' }],
+      };
     case 'game_data':
       return { ...state, gameData: action.payload };
     case 'user':
       return { ...state, user: action.payload };
+    case 'select_team':
+      return { ...state, ...action.payload };
+    case 'select_role':
+      return { ...state, players };
     default:
       throw new Error();
   }
@@ -51,13 +63,15 @@ const App = () => {
     password2,
     startDate,
     players,
-    playerName,
     title,
     gameData,
     user,
+    winningTeam,
   } = state;
 
-  // console.log(state);
+  let { playerName } = state;
+
+  console.log(state);
 
   const handleRegister = (e) => {
     e.preventDefault();
@@ -86,7 +100,23 @@ const App = () => {
 
   const handleChangeDate = date => dispatch({ type: 'change_date', payload: date });
 
-  const handleAddPlayer = playerName ? () => dispatch({ type: 'add_player' }) : null;
+  const handleAddPlayer = () => {
+    let playerExists = false;
+    if (playerName) {
+      players.forEach((el) => {
+        if (el.playerName === playerName) {
+          playerExists = true;
+        }
+      });
+      if (!playerExists) {
+        dispatch({ type: 'add_player' });
+      }
+    }
+  };
+
+  const handleSelectTeam = e => dispatch({ type: 'select_team', payload: { [e.target.id]: e.target.value } });
+
+  const handleSelectRole = (e, i) => dispatch({ type: 'select_role', payload: { playerRole: e.target.value, i } });
 
   const handleAddGame = () => {
     axios.post('/game', { title, startDate, players })
@@ -142,6 +172,10 @@ const App = () => {
               handleAddPlayer={handleAddPlayer}
               players={players}
               handleAddGame={handleAddGame}
+              handleSelectRole={handleSelectRole}
+              handleSelectTeam={handleSelectTeam}
+              winningTeam={winningTeam}
+              playerName={playerName}
             />
           )}
         />
