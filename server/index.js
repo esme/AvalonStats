@@ -13,7 +13,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // Connect to DB
-mongoose.connect('mongodb://localhost/loginapp');
+mongoose.connect('mongodb://localhost/AvalonStats');
 const db = mongoose.connection;
 
 // Middleware

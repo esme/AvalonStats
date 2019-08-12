@@ -7,18 +7,17 @@ const UserSchema = mongoose.Schema({
     type: String,
     index: true,
   },
-  password: {
-    type: String,
-  },
-  email: {
-    type: String,
-  },
-  name: {
-    type: String,
-  },
+  password: String,
+  dateJoined: Date,
+  totalGamesPlayed: Number,
+  totalWins: Number,
+  totalLosses: Number,
+  totalResWins: Number,
+  totalResLosses: Number,
 });
 
-const User = module.exports = mongoose.model('User', UserSchema);
+const User = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('User', UserSchema);
 
 module.exports.createUser = (newUser, callback) => {
   bcrypt.genSalt(10, (err, salt) => {
