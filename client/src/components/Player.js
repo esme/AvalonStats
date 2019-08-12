@@ -6,7 +6,7 @@ const Div = styled('div')`
   justify-content: space-between;
 `;
 
-const Player = ({ details, handleIncrement, handleDecrement }) => (
+const Player = ({ details }) => (
   <Div>
     <div>
       <span>Player: </span>
@@ -14,13 +14,16 @@ const Player = ({ details, handleIncrement, handleDecrement }) => (
     </div>
     <div>
       <span>Role: </span>
-      <span>Merlin</span>
-    </div>
-    <div>
-      <span>Score: </span>
-      <button type="button" onClick={handleDecrement}>&#8211;</button>
-      <span>{details.score}</span>
-      <button type="button" onClick={handleIncrement}>+</button>
+      <select id="role">
+        <option value="vt">Loyal Servant of Arthur</option>
+        <option value="merlin">Merlin</option>
+        <option value="percival">Percival</option>
+        <option value="morgana">Morgana</option>
+        <option value="assassin">Assassin</option>
+        <option value="oberon">Oberon</option>
+        <option value="mordred">Mordred</option>
+        <option value="lady">Lady of the Lake</option>
+      </select>
     </div>
   </Div>
 );

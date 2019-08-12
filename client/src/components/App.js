@@ -33,13 +33,7 @@ function reducer(state, action) {
     case 'change_date':
       return { ...state, startDate: action.payload };
     case 'add_player':
-      return { ...state, players: [...state.players, { playerName: state.playerName, score: 0, role: 'Merlin' }] };
-    case 'increment':
-      players[action.payload].score += 1;
-      return { ...state, players };
-    case 'decrement':
-      players[action.payload].score -= 1;
-      return { ...state, players };
+      return { ...state, players: [...state.players, { playerName: state.playerName, role: 'Merlin' }] };
     case 'game_data':
       return { ...state, gameData: action.payload };
     case 'user':
@@ -94,10 +88,6 @@ const App = () => {
 
   const handleAddPlayer = playerName ? () => dispatch({ type: 'add_player' }) : null;
 
-  const handleIncrement = i => dispatch({ type: 'increment', payload: i });
-
-  const handleDecrement = i => dispatch({ type: 'decrement', payload: i });
-
   const handleAddGame = () => {
     axios.post('/game', { title, startDate, players })
       .then(({ data }) => console.log(data));
@@ -151,8 +141,6 @@ const App = () => {
               handleChange={handleChange}
               handleAddPlayer={handleAddPlayer}
               players={players}
-              handleIncrement={handleIncrement}
-              handleDecrement={handleDecrement}
               handleAddGame={handleAddGame}
             />
           )}
