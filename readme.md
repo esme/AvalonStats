@@ -1,32 +1,30 @@
 # AvalonStats
 
-> Project description
+A statistics tracker for the Resistance: Avalon board game
 
-## Table of Contents
-
-1. [Usage](#Usage)
-1. [Requirements](#requirements)
-1. [Development](#development)
+## Tech Stack
+Front-end: Javascript, React, React Hooks, Styled Components, Tachyons
+<br />
+Back-end: Node.js, Express, Passport.js
+<br />
 
 ## Usage
 
-> Some usage instructions
+From within the root directory:
+
+```bash
+# install dependencies
+npm install
+
+# compile with webpack
+npm run build
+
+# start the app
+npm run start
+```
 
 ## Requirements
 
-An `nvmrc` file is included if using [nvm](https://github.com/creationix/nvm).
-
-- Node 6.13.0
-- etc
-
-## Development
-
-### Installing Dependencies
-
-From within the root directory:
-
-```sh
-npm install -g webpack
-npm install
-```
-
+- Nvm
+- Node
+- Git
