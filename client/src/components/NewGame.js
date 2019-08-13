@@ -18,15 +18,15 @@ const NewGame = ({
   startDate,
   handleChangeDate,
   handleChange,
+  handleChangePlayer,
   handleAddPlayer,
-  players,
+  playersArr,
+  playersRoleArr,
   handleAddGame,
-  handleSelectRole,
   handleSelectTeam,
   winningTeam,
   tempName,
 }) => {
-  const playersArr = Object.keys(players);
   return (
     <Main>
       <Div><h3>Add a Game</h3></Div>
@@ -51,16 +51,18 @@ const NewGame = ({
         </Div>
         <Div>
           <h4>Add Player:</h4>
-          <Input type="text" name="tempName" onChange={e => handleChange(e)} value={tempName} placeholder="(required)" />
+          <Input type="text" name="tempName" onChange={e => handleChange(e)} value={tempName} />
           <Button type="button" onClick={handleAddPlayer} value="Create Player" />
         </Div>
         <Div>
-          {playersArr.length ? <h4>Players:</h4> : <br />}
-          {playersArr.map(el => (
+          <h4>Players:</h4>
+          {playersArr.map((el, i) => (
             <Player
-              key={el}
+              i={i}
+              key={i}
               playerName={el}
-              handleSelectRole={handleSelectRole}
+              playerRole={playersRoleArr[i]}
+              handleChangePlayer={handleChangePlayer}
             />
           ))}
         </Div>

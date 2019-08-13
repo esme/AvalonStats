@@ -1,20 +1,39 @@
 import React from 'react';
-import styled from 'tachyons-components';
+import styled from 'styled-components';
+
+const Input = styled('input')`
+  width: 227px;
+`;
+
+const Wrapper = styled('div')`
+  padding: 5px 0;
+`;
 
 const Div = styled('div')`
   display: flex;
   justify-content: space-between;
+  height: 24px;
 `;
 
-const Player = ({ playerName, handleSelectRole }) => (
-  <Div>
-    <div>
+const Select = styled('select')`
+  background-color: #f2f2f2;
+  border: none;
+`;
+
+const Player = ({
+  i,
+  playerName,
+  playerRole,
+  handleChangePlayer,
+}) => (
+  <Wrapper>
+    <Div>
       <span>Player: </span>
-      <span>{playerName}</span>
-    </div>
-    <div>
+      <Input name="playerName" value={playerName} onChange={e => handleChangePlayer(e, i)} />
+    </Div>
+    <Div>
       <span>Role: </span>
-      <select id="playerRole" onChange={e => handleSelectRole(e, playerName)}>
+      <Select name="playerRole" defaultValue={playerRole} onChange={e => handleChangePlayer(e, i)}>
         <option value="merlin">Merlin</option>
         <option value="percival">Percival</option>
         <option value="vt">Loyal Servant of Arthur</option>
@@ -24,9 +43,9 @@ const Player = ({ playerName, handleSelectRole }) => (
         <option value="assassin">Assassin</option>
         <option value="oberon">Oberon</option>
         <option value="mordred">Mordred</option>
-      </select>
-    </div>
-  </Div>
+      </Select>
+    </Div>
+  </Wrapper>
 );
 
 export default Player;

@@ -9,6 +9,7 @@ import Toolbar from './Toolbar';
 import NewGame from './NewGame';
 import Games from './Games';
 import reducer from './reducer';
+import Profile from './Profile';
 import { resistance } from './Roles';
 
 const GlobalStyle = createGlobalStyle`
@@ -24,10 +25,16 @@ const initialState = {
   id: '',
   username: '',
   startDate: new Date(),
-  players: {},
+  playersArr: ['1', '2', '3', '4', '5'],
+  playersRoleArr: ['merlin', 'percival', 'vt', 'assassin', 'morgana'],
   winningTeam: 'resistance',
   tempName: '',
   title: '',
+  totalGamesPlayed: 0,
+  totalLosses: 0,
+  totalResLosses: 0,
+  totalResWins: 0,
+  totalWins: 0,
 };
 
 const App = () => {
@@ -39,15 +46,31 @@ const App = () => {
     password,
     password2,
     startDate,
-    players,
     title,
     gameData,
     winningTeam,
+    totalGamesPlayed,
+    totalLosses,
+    totalResLosses,
+    totalResWins,
+    totalWins,
+    playersArr,
+    playersRoleArr,
   } = state;
 
   let { tempName } = state;
 
-  console.log('state: ', state);
+  // console.log('state: ', state);
+
+  const getPlayer = (userid) => {
+    axios.get(`/player/${userid}`)
+      .then(({ data }) => {
+        if (data) {
+          console.log('get player:', data);
+          dispatch({ type: 'player_data', payload: data });
+        }
+      });
+  };
 
   const handleLogin = (e) => {
     if (e) { e.preventDefault(); }
@@ -58,6 +81,7 @@ const App = () => {
           const user = { id: data._id, username: data.username };
           console.log(user);
           dispatch({ type: 'user', payload: user });
+          getPlayer(data.username);
         }
       })
       .catch((error) => {
@@ -80,27 +104,27 @@ const App = () => {
         if (data.username) {
           const user = { id: data._id, username: data.username };
           dispatch({ type: 'user', payload: user });
+          getPlayer(data.username);
         }
       });
   };
 
   const handleChange = e => dispatch({ type: 'input_details', payload: { [e.target.name]: e.target.value } });
 
+  const handleChangePlayer = (e, i) => dispatch({ type: 'change_player', payload: { [e.target.name]: e.target.value, i } });
+
   const handleChangeDate = date => dispatch({ type: 'change_date', payload: date });
 
-  const handleAddPlayer = !players[tempName] && tempName ? () => dispatch({ type: 'add_player' }) : null;
+  const handleAddPlayer = !playersArr.includes(tempName) && tempName ? () => dispatch({ type: 'add_player' }) : null;
 
   const handleSelectTeam = e => dispatch({ type: 'select_team', payload: { [e.target.id]: e.target.value } });
-
-  const handleSelectRole = (e, selectedPlayerName) => dispatch({ type: 'select_role', payload: { selectedPlayerName, playerRole: e.target.value } });
 
   const handleAddGame = () => {
     const resistanceTeam = [];
     const spyTeam = [];
-    const playersArr = Object.keys(players);
     if (playersArr.length) {
-      playersArr.forEach((playerName) => {
-        const playerRole = players[playerName];
+      playersArr.forEach((playerName, i) => {
+        const playerRole = playersRoleArr[i];
         if (resistance.has(playerRole)) {
           resistanceTeam.push({ playerName, playerRole });
         } else {
@@ -115,9 +139,9 @@ const App = () => {
         winningTeam,
         resistanceTeam,
         spyTeam,
-        players: JSON.stringify(players),
+        players: playersArr,
       })
-        .then(({ data }) => window.location.reload());
+        .then(() => window.location.reload());
     } else {
       alert('You need to add at least one player');
     }
@@ -131,6 +155,11 @@ const App = () => {
       });
   };
 
+  const handleLogout = () => {
+    axios.get('/logout')
+      .then(() => dispatch({ type: 'user', payload: { username: '', id: '' } }));
+  };
+
   useEffect(() => {
     getGames();
     getUser();
@@ -140,13 +169,22 @@ const App = () => {
     <Router>
       <React.Fragment>
         <GlobalStyle whiteColor />
-        <Toolbar username={username} />
+        <Toolbar username={username} handleLogout={handleLogout} />
       </React.Fragment>
       <Switch>
         <Route
           exact
           path="/"
-          render={() => <Login handleChange={handleChange} handleLogin={handleLogin} />}
+          render={username ? () => (
+            <Profile
+              username={username}
+              totalGamesPlayed={totalGamesPlayed}
+              totalLosses={totalLosses}
+              totalResLosses={totalResLosses}
+              totalResWins={totalResWins}
+              totalWins={totalWins}
+            />
+          ) : () => <Login handleChange={handleChange} handleLogin={handleLogin} />}
         />
         <Route
           path="/register"
@@ -159,10 +197,11 @@ const App = () => {
               startDate={startDate}
               handleChangeDate={handleChangeDate}
               handleChange={handleChange}
+              handleChangePlayer={handleChangePlayer}
               handleAddPlayer={handleAddPlayer}
-              players={players}
+              playersArr={playersArr}
+              playersRoleArr={playersRoleArr}
               handleAddGame={handleAddGame}
-              handleSelectRole={handleSelectRole}
               handleSelectTeam={handleSelectTeam}
               winningTeam={winningTeam}
               tempName={tempName}

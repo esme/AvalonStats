@@ -26,7 +26,23 @@ const Text = styled.section`
   background-color: #f8f9fa;
 `;
 
-const Toolbar = ({ username }) => (
+const Input = styled('input')`
+  color: #007bff;
+  text-decoration: none;
+  background-color: transparent;
+  display: block;
+  padding: 0.5rem 1rem;
+  background-color: #f8f9fa;
+  border: none;
+  &:focus {
+    outline: none;
+  }
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+const Toolbar = ({ username, handleLogout }) => (
   <Navbar bg="light" expand="lg">
     <Navbar.Brand href="/">
       <Brand>AvalonStats</Brand>
@@ -37,6 +53,7 @@ const Toolbar = ({ username }) => (
         <NavLink href="/newgame">New Game</NavLink>
         <NavLink href="/games">Games</NavLink>
       </Nav>
+      {username ? <Input type="button" onClick={handleLogout} value="Logout" /> : null}
       {username ? <Text>{username}</Text> : <Text>Not Logged In</Text>}
     </Navbar.Collapse>
   </Navbar>

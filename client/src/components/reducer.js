@@ -1,13 +1,21 @@
 function reducer(state, action) {
   const tempName = '';
-  const players = { ...state.players };
+  const playersArr = [...state.playersArr];
+  const playersRoleArr = [...state.playersRoleArr];
   if (action.type === 'add_player') {
-    players[state.tempName] = 'merlin';
+    playersArr.push(state.tempName);
+    playersRoleArr.push('merlin');
   }
 
-  if (action.type === 'select_role') {
-    const { selectedPlayerName, playerRole } = action.payload;
-    players[selectedPlayerName] = playerRole;
+  if (action.type === 'change_player') {
+    console.log(action.payload)
+    const { playerName, playerRole, i } = action.payload;
+    if (playerName) {
+      playersArr[i] = playerName;
+    }
+    if (playerRole) {
+      playersRoleArr[i] = playerRole;
+    }
   }
 
   switch (action.type) {
@@ -16,15 +24,24 @@ function reducer(state, action) {
     case 'change_date':
       return { ...state, startDate: action.payload };
     case 'add_player':
-      return { ...state, players, tempName };
+      return { ...state, playersArr, playersRoleArr, tempName };
     case 'game_data':
       return { ...state, gameData: action.payload };
     case 'user':
       return { ...state, id: action.payload.id, username: action.payload.username };
     case 'select_team':
       return { ...state, ...action.payload };
-    case 'select_role':
-      return { ...state, players };
+    case 'player_data':
+      return {
+        ...state,
+        totalGamesPlayed: action.payload.totalGamesPlayed,
+        totalLosses: action.payload.totalLosses,
+        totalResLosses: action.payload.totalResLosses,
+        totalResWins: action.payload.totalResWins,
+        totalWins: action.payload.totalWins,
+      };
+    case 'change_player':
+      return { ...state, playersArr, playersRoleArr };
     default:
       throw new Error();
   }
