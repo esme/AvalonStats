@@ -26,6 +26,9 @@ const Profile = ({
     <Div>Total Games Won: {totalWins}</Div>
     <Div>Total Games Lost: {totalLosses}</Div>
     <Div>Win Rate: {totalWins / totalGamesPlayed * 100}%</Div>
+    <br />
+    <Div>Gaming Group: {username}</Div>
+    <Div><Button type="button" value="Change Gaming Group" /></Div>
   </Main>
 );
 

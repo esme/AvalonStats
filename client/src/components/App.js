@@ -16,8 +16,8 @@ const GlobalStyle = createGlobalStyle`
   * {
     margin: 0;
     padding: 0;
-    color: ${props => (props.whiteColor ? '#222' : '#eee')};
-    background-color: ${props => (props.whiteColor ? 'white' : '#222')};
+    color: ${props => (props.darkTheme ? '#eee' : '#222')};
+    background-color: ${props => (props.darkTheme ? '#222' : 'white')};
   }
 `;
 
@@ -60,7 +60,7 @@ const App = () => {
 
   let { tempName } = state;
 
-  // console.log('state: ', state);
+  console.log('state: ', state);
 
   const getPlayer = (userid) => {
     axios.get(`/player/${userid}`)
@@ -139,7 +139,7 @@ const App = () => {
         winningTeam,
         resistanceTeam,
         spyTeam,
-        players: playersArr,
+        players: JSON.stringify(playersArr),
       })
         .then(() => window.location.reload());
     } else {
@@ -168,7 +168,7 @@ const App = () => {
   return (
     <Router>
       <React.Fragment>
-        <GlobalStyle whiteColor />
+        <GlobalStyle />
         <Toolbar username={username} handleLogout={handleLogout} />
       </React.Fragment>
       <Switch>

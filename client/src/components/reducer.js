@@ -10,10 +10,10 @@ function reducer(state, action) {
   if (action.type === 'change_player') {
     console.log(action.payload)
     const { playerName, playerRole, i } = action.payload;
-    if (playerName) {
+    if (playerName !== undefined) {
       playersArr[i] = playerName;
     }
-    if (playerRole) {
+    if (playerRole !== undefined) {
       playersRoleArr[i] = playerRole;
     }
   }
