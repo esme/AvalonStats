@@ -10,15 +10,22 @@ const LocalStrategy = require('passport-local').Strategy;
 
 const User = require('./models/user');
 const Game = require('./models/game');
+const Player = require('./models/player');
 
 const updateGame = require('./controllers/game');
+
+const uri = require('./config.js') || 'mongodb://localhost/AvalonStats';
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 // Connect to DB
-mongoose.connect('mongodb://localhost/AvalonStats');
+mongoose.connect(uri);
+
 const db = mongoose.connection;
+db.once('open', () => {
+  console.log('connected to mongodb');
+});
 
 // Middleware
 app.use(morgan('dev'));
@@ -121,6 +128,16 @@ app.get('/gamedata', async (req, res) => {
 
 app.get('/newgame', isLoggedIn, (req, res) => {
   res.sendFile(path.resolve(__dirname, '../client', 'dist', 'index.html'));
+});
+
+app.get('/player/:username', async (req, res) => {
+  const { username } = req.params;
+  const result = await Player.find({ username });
+  if (result.length) {
+    res.send(result[0]);
+  } else {
+    res.send();
+  }
 });
 
 app.get('*', (req, res) => {
