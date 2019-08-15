@@ -10,6 +10,7 @@ const PlayerSchema = mongoose.Schema({
   totalLosses: Number,
   totalResWins: Number,
   totalResLosses: Number,
+  gamingGroup: String,
 });
 
 module.exports = mongoose.model('Player', PlayerSchema);

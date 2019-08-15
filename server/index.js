@@ -14,7 +14,10 @@ const Player = require('./models/player');
 
 const updateGame = require('./controllers/game');
 
-const uri = require('./config.js') || 'mongodb://localhost/AvalonStats';
+const cache = require('./cache');
+
+const uri = 'mongodb://localhost/AvalonStats';
+// const uri = require('./config.js') || 'mongodb://localhost/AvalonStats';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -138,6 +141,14 @@ app.get('/player/:username', async (req, res) => {
   } else {
     res.send();
   }
+});
+
+app.post('/theme/:id/:darkTheme', cache, (req, res) => {
+  res.send();
+});
+
+app.get('/theme/:id', cache, (req, res) => {
+  res.send(req.darkTheme);
 });
 
 app.get('*', (req, res) => {

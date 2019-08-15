@@ -8,6 +8,7 @@ const GamerSchema = mongoose.Schema({
 const GameSchema = mongoose.Schema({
   title: String,
   username: String,
+  gamingGroup: String,
   startDate: Date,
   winningTeam: String,
   spyTeam: [GamerSchema],
