@@ -9,8 +9,8 @@ const Main = styled('div')`
 `;
 
 const Button = styled('input')`
-  br2 b--black-20
-  b ph3 pv2 input-reset ba bg-light-gray grow pointer f6 dib w-80
+  ${({ darkTheme }) => (!darkTheme ? 'b--black-20' : 'b--white-60 dark-gray')};
+  br2 b pv2 input-reset ba bg-light-gray grow pointer f6 dib w-80
 `;
 
 const ButtonPill = styled('input')`
@@ -22,8 +22,8 @@ const Div = styled('div')`
 `;
 
 const Input = styled('input')`
-  br2 b--black-20
-  pt2 pb2 input-reset ba bg-transparent w-80
+  ${({ darkTheme }) => (!darkTheme ? 'b--black-20' : 'b--white-60')};
+  br2 pt2 pb2 input-reset ba bg-transparent w-80
 `;
 
 // const Header = styled.section`

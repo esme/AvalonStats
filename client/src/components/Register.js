@@ -8,7 +8,7 @@ import {
   Input,
 } from './StyledComponents';
 
-const Register = ({ handleChange, handleRegister }) => (
+const Register = ({ handleChange, handleRegister, darkTheme }) => (
   <Main>
     <Avatar
       src="http://www.gonnageek.com/wp-content/uploads/2013/11/avalon1.jpg"
@@ -19,20 +19,20 @@ const Register = ({ handleChange, handleRegister }) => (
       <Div>
         <label>Username</label>
         <br />
-        <Input type="text" name="tempUser" minLength="1" required />
+        <Input type="text" name="tempUser" minLength="1" required darkTheme={darkTheme} />
       </Div>
       <Div>
         <label>Password</label>
         <br />
-        <Input type="password" name="password" minLength="4" required />
+        <Input type="password" name="password" minLength="4" required darkTheme={darkTheme} />
       </Div>
       <Div>
         <label>Verify Password</label>
         <br />
-        <Input type="password" name="password2" minLength="4" required />
+        <Input type="password" name="password2" minLength="4" required darkTheme={darkTheme} />
       </Div>
       <Div>
-        <Button type="submit" value="Register" />
+        <Button type="submit" value="Register" darkTheme={darkTheme} />
       </Div>
     </form>
     <br />

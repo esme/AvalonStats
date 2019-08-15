@@ -16,8 +16,21 @@ const GlobalStyle = createGlobalStyle`
   * {
     margin: 0;
     padding: 0;
-    color: ${props => (props.darkTheme ? '#eee' : '#222')};
-    background-color: ${props => (props.darkTheme ? '#222' : 'white')};
+    color: ${({ darkTheme }) => (darkTheme ? 'white' : null)};
+    background-color: ${({ darkTheme }) => (darkTheme ? '#222' : null)};
+  }
+
+  input, button {
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    background: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 0;
+    box-sizing: content-box;
+    border-color: ${({ darkTheme }) => (!darkTheme ? '#222' : null)};
   }
 `;
 
@@ -35,6 +48,7 @@ const initialState = {
   totalResLosses: 0,
   totalResWins: 0,
   totalWins: 0,
+  darkTheme: false,
 };
 
 const App = () => {
@@ -56,14 +70,15 @@ const App = () => {
     totalWins,
     playersArr,
     playersRoleArr,
+    darkTheme,
   } = state;
 
   let { tempName } = state;
 
   console.log('state: ', state);
 
-  const getPlayer = (userid) => {
-    axios.get(`/player/${userid}`)
+  const getPlayer = () => {
+    axios.get(`/player/${username}`)
       .then(({ data }) => {
         if (data) {
           console.log('get player:', data);
@@ -81,7 +96,7 @@ const App = () => {
           const user = { id: data._id, username: data.username };
           console.log(user);
           dispatch({ type: 'user', payload: user });
-          getPlayer(data.username);
+          getPlayer();
         }
       })
       .catch((error) => {
@@ -97,6 +112,22 @@ const App = () => {
     }
   };
 
+  const handleCheck = () => {
+    dispatch({ type: 'check_box' });
+    if (id) {
+      axios.post(`/theme/${id}/${darkTheme}`);
+    }
+  };
+
+  const getTheme = () => {
+    axios.get(`/theme/${id}`)
+      .then(({ data }) => {
+        if (data) {
+          handleCheck();
+        }
+      });
+  };
+
   const getUser = () => {
     axios.get('/user')
       .then(({ data }) => {
@@ -104,7 +135,8 @@ const App = () => {
         if (data.username) {
           const user = { id: data._id, username: data.username };
           dispatch({ type: 'user', payload: user });
-          getPlayer(data.username);
+          getPlayer();
+          getTheme();
         }
       });
   };
@@ -168,8 +200,13 @@ const App = () => {
   return (
     <Router>
       <React.Fragment>
-        <GlobalStyle />
-        <Toolbar username={username} handleLogout={handleLogout} />
+        <GlobalStyle darkTheme={darkTheme} />
+        <Toolbar
+          username={username}
+          handleLogout={handleLogout}
+          darkTheme={darkTheme}
+          handleCheck={handleCheck}
+        />
       </React.Fragment>
       <Switch>
         <Route
@@ -184,11 +221,11 @@ const App = () => {
               totalResWins={totalResWins}
               totalWins={totalWins}
             />
-          ) : () => <Login handleChange={handleChange} handleLogin={handleLogin} />}
+          ) : () => <Login handleChange={handleChange} handleLogin={handleLogin} darkTheme={darkTheme}/>}
         />
         <Route
           path="/register"
-          render={() => <Register handleChange={handleChange} handleRegister={handleRegister} />}
+          render={() => <Register handleChange={handleChange} handleRegister={handleRegister} darkTheme={darkTheme}/>}
         />
         <Route
           path="/newgame"

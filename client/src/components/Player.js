@@ -2,7 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Input = styled('input')`
-  width: 227px;
+  width: 225px;
+  border: 1px solid #eee;
+  outline: none;
 `;
 
 const Wrapper = styled('div')`

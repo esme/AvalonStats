@@ -42,6 +42,8 @@ function reducer(state, action) {
       };
     case 'change_player':
       return { ...state, playersArr, playersRoleArr };
+    case 'check_box':
+      return { ...state, darkTheme: !state.darkTheme };
     default:
       throw new Error();
   }

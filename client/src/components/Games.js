@@ -8,11 +8,11 @@ import {
 } from './StyledComponents';
 
 const ResDiv = styled('div')`
-  color: ${props => (props.winteam === 'resistance' ? 'blue' : '#aaa')};
+  color: ${props => (props.winteam === 'resistance' ? '#007bff' : '#aaa')};
 `;
 
 const SpyDiv = styled('div')`
-  color: ${props => (props.winteam === 'spies' ? 'blue' : '#aaa')};
+  color: ${props => (props.winteam === 'spies' ? '007bff' : '#aaa')};
 `;
 
 const Game = ({ el }) => {
