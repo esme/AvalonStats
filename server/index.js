@@ -16,8 +16,8 @@ const updateGame = require('./controllers/game');
 
 const cache = require('./cache');
 
-const uri = 'mongodb://localhost/AvalonStats';
-// const uri = require('./config.js') || 'mongodb://localhost/AvalonStats';
+// const uri = 'mongodb://localhost/AvalonStats';
+const uri = process.env.MONGODB_URI || 'mongodb://localhost/AvalonStats';
 
 const app = express();
 const port = process.env.PORT || 3000;
